@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2>Production Jobs</h2>
+    <p class="text-muted">Schedule and manage products, machines, operators, materials, due dates, and status.</p>
+  </div>
+</div>
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Production Job List</h5>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Machine</th>
+                <th>Operator</th>
+                <th>Material</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for job in jobs %}
+              <tr>
+                <td>{{ job.product }}</td>
+                <td>{{ job.machine }}</td>
+                <td>{{ job.operator }}</td>
+                <td>{{ job.material }}</td>
+                <td>{{ job.due_date }}</td>
+                <td>{{ job.status }}</td>
+                <td class="text-end">
+                  <a href="{{ url_for('jobs', edit=job.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                  <a href="{{ url_for('jobs', delete=job.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this production job?');">Delete</a>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="7" class="text-center">No production jobs available.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ job and 'Edit Job' or 'Add Job' }}</h5>
+        <form method="post">
+          {% if job %}
+          <input type="hidden" name="id" value="{{ job.id }}">
+          {% endif %}
+          <div class="mb-3">
+            <label class="form-label">Product</label>
+            <input class="form-control" name="product" value="{{ job.product if job else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Machine</label>
+            <select class="form-select" name="machine" required>
+              <option value="">Choose a machine</option>
+              {% for machine in machines %}
+              <option value="{{ machine.name }}" {% if job and job.machine == machine.name %}selected{% endif %}>{{ machine.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Operator</label>
+            <select class="form-select" name="operator" required>
+              <option value="">Choose an operator</option>
+              {% for operator in operators %}
+              <option value="{{ operator.name }}" {% if job and job.operator == operator.name %}selected{% endif %}>{{ operator.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Material</label>
+            <select class="form-select" name="material" required>
+              <option value="">Choose material</option>
+              {% for material in materials %}
+              <option value="{{ material.material }}" {% if job and job.material == material.material %}selected{% endif %}>{{ material.material }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Due Date</label>
+            <input type="date" class="form-control" name="due_date" value="{{ job.due_date if job else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <input class="form-control" name="status" value="{{ job.status if job else '' }}" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Save Job</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

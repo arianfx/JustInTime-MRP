@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2>Dashboard</h2>
+    <p class="text-muted">FloatFry Manufacturing Resource Planning overview.</p>
+  </div>
+</div>
+<div class="row g-4">
+  <div class="col-md-6 col-xl-3">
+    <div class="card border-primary shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Machines</h5>
+        <p class="display-6">{{ machines }}</p>
+        <a href="{{ url_for('machines') }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card border-success shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Operators</h5>
+        <p class="display-6">{{ operators }}</p>
+        <a href="{{ url_for('operators') }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card border-warning shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Materials</h5>
+        <p class="display-6">{{ materials }}</p>
+        <a href="{{ url_for('materials') }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card border-info shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Production Jobs</h5>
+        <p class="display-6">{{ jobs }}</p>
+        <a href="{{ url_for('jobs') }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

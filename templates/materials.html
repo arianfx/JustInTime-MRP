@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2>Materials</h2>
+    <p class="text-muted">Inventory and supplier tracking for raw materials and stock status.</p>
+  </div>
+</div>
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Materials List</h5>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Quantity</th>
+                <th>Supplier</th>
+                <th>Stock Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for material in materials %}
+              <tr>
+                <td>{{ material.material }}</td>
+                <td>{{ material.quantity }}</td>
+                <td>{{ material.supplier }}</td>
+                <td>{{ material.stock_status }}</td>
+                <td class="text-end">
+                  <a href="{{ url_for('materials', edit=material.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                  <a href="{{ url_for('materials', delete=material.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this material?');">Delete</a>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5" class="text-center">No materials available.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ material and 'Edit Material' or 'Add Material' }}</h5>
+        <form method="post">
+          {% if material %}
+          <input type="hidden" name="id" value="{{ material.id }}">
+          {% endif %}
+          <div class="mb-3">
+            <label class="form-label">Material</label>
+            <input class="form-control" name="material" value="{{ material.material if material else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Quantity</label>
+            <input class="form-control" name="quantity" value="{{ material.quantity if material else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Supplier</label>
+            <input class="form-control" name="supplier" value="{{ material.supplier if material else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Stock Status</label>
+            <input class="form-control" name="stock_status" value="{{ material.stock_status if material else '' }}" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Save Material</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

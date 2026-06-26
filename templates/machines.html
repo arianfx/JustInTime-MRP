@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2>Machines</h2>
+    <p class="text-muted">Manage machine inventory, types, capacity, and availability.</p>
+  </div>
+</div>
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Machine List</h5>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Capacity</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for machine in machines %}
+              <tr>
+                <td>{{ machine.name }}</td>
+                <td>{{ machine.type }}</td>
+                <td>{{ machine.status }}</td>
+                <td>{{ machine.capacity }}</td>
+                <td class="text-end">
+                  <a href="{{ url_for('machines', edit=machine.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                  <a href="{{ url_for('machines', delete=machine.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this machine?');">Delete</a>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5" class="text-center">No machines available.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ machine and 'Edit Machine' or 'Add Machine' }}</h5>
+        <form method="post">
+          {% if machine %}
+          <input type="hidden" name="id" value="{{ machine.id }}">
+          {% endif %}
+          <div class="mb-3">
+            <label class="form-label">Machine Name</label>
+            <input class="form-control" name="name" value="{{ machine.name if machine else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Type</label>
+            <input class="form-control" name="type" value="{{ machine.type if machine else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <input class="form-control" name="status" value="{{ machine.status if machine else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Capacity</label>
+            <input class="form-control" name="capacity" value="{{ machine.capacity if machine else '' }}" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Save Machine</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
